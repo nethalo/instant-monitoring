@@ -15,8 +15,8 @@ Vagrant.configure(2) do |config|
   config.ssh.private_key_path = "~/.ssh/id_rsa"
 
   config.vm.define "nagioscentral" do |nagioscentral|
-    config.vm.hostname = "nagios-central"
-#    config.vm.network "private_network", ip: "192.168.1.151"
+     config.vm.hostname = "nagios-central"
+     config.vm.network "forwarded_port", guest: 80, host: 8080
      config.vm.network "private_network", type: "dhcp"
   end
 

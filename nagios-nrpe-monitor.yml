@@ -2,6 +2,18 @@
 - hosts: monitor-server
   sudo: yes
   tasks:
+  - name: Make sure Nagios3 is not installed
+    apt: name={{ item }} state=absent purge=yes
+    with_items:
+      - nagios3
+      - nagios3-cgi
+      - nagios3-common
+      - nagios3-core
+      - nagios-images
+      - nagios-plugins
+      - nagios-plugins-basic
+      - nagios-plugins-common
+      - nagios-plugins-standard
   - name: Install needed packages --> nagios-nrpe-plugin
     apt: name={{ item }} state=present update_cache=yes cache_valid_time=86400
     with_items:

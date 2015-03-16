@@ -8,7 +8,7 @@
   - name: Set adduser package
     apt: name=adduser state=present
   - name: Add new user
-    user: name={{ username }} createhome=yes state=present
+    user: name={{ username }} createhome=yes shell=/bin/bash state=present
   - name: Add new user public key to authorized_key
     authorized_key: user={{ username }} key="{{ lookup('file', '/Users/daniel/.ssh/id_rsa.pub') }}"
   - name: Give sudo passwordless to new user
