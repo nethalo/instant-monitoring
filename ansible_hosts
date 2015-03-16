@@ -1,0 +1,5 @@
+[small-nodes]
+172.28.128.[3:4]
+
+[monitor-server]
+172.28.128.6

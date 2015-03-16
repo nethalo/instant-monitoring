@@ -1,0 +1,25 @@
+---
+- hosts: monitor-server
+  tasks:
+  - name: Fake task to get facts
+    service: name={{ item }} state=present
+    with_items:
+    - []
+- hosts: small-nodes
+  sudo: yes
+  tasks:
+  - name: Install needed packages --> nagios-plugins, nagios-nrpe-server
+    apt: name={{ item }} state=present update_cache=yes cache_valid_time=86400
+    with_items:
+      - nagios-plugins
+      - nagios-nrpe-server
+  - name: Add local ip to allowed_hosts on /etc/nagios/nrpe.cfg
+    lineinfile: dest=/etc/nagios/nrpe.cfg regexp='^allowed_hosts.*' line='allowed_hosts=127.0.0.1,{{ ansible_eth1.ipv4.address }},{{ hostvars[groups['monitor-server'][0]]['ansible_eth1']['ipv4']['address'] }}' state=present
+    notify: 
+    - restart nagios nrpe
+  - name: Comment default hardcoded commands present inside nrpe.cfg
+    replace: dest=/etc/nagios/nrpe.cfg regexp='^command\[' replace='# \g<0>'
+
+  handlers:
+  - name: restart nagios nrpe
+    service: name=nagios-nrpe-server state=restarted

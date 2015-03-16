@@ -1,0 +1,8 @@
+---
+- hosts: monitor-server
+  sudo: yes
+  tasks:
+  - name: Install needed packages --> nagios-nrpe-plugin
+    apt: name={{ item }} state=present update_cache=yes cache_valid_time=86400
+    with_items:
+      - nagios-nrpe-plugin
