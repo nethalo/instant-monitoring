@@ -1,5 +1,7 @@
 ---
 - hosts: monitor-server
+  vars:
+    - nagios_version: 4.0.8
   sudo: yes
   tasks:
   - name: Make sure Nagios3 is not installed
@@ -14,6 +16,27 @@
       - nagios-plugins-basic
       - nagios-plugins-common
       - nagios-plugins-standard
+  - name: Install prerequisites packages for Nagios
+    apt: name={{ item }} state=present update_cache=yes cache_valid_time=86400
+    with_items:
+      - wget
+      - build-essential
+      - apache2
+      - php5-gd
+      - libgd2-xpm-dev
+      - libapache2-mod-php5
+  - name: Create nagioscmd group
+    group: name=nagioscmd state=present
+  - name: Add Nagios user and add it to nagioscmd group
+    user: name=nagios groups=nagioscmd,www-data createhome=no append=yes
+  - name: Download nagios core
+    get_url: url=http://prdownloads.sourceforge.net/sourceforge/nagios/nagios-{{ nagios_version }}.tar.gz dest=/tmp/nagios-{{ nagios_version }}.tar.gz
+    sudo: no
+  - name: Download nagios plugins
+    get_url: url=http://nagios-plugins.org/download/nagios-plugins-2.0.3.tar.gz dest=/tmp/nagios-plugins-2.0.3.tar.gz
+    sudo: no
+  - name: Untar the Nagios Core tarball
+    unarchive: src=/tmp/nagios-{{ nagios_version }}.tar.gz dest=/tmp copy=no
   - name: Install needed packages --> nagios-nrpe-plugin
     apt: name={{ item }} state=present update_cache=yes cache_valid_time=86400
     with_items:
