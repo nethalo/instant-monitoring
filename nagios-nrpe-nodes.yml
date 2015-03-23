@@ -13,6 +13,7 @@
     with_items:
       - nagios-plugins
       - nagios-nrpe-server
+      - percona-nagios-plugins
   - name: Add local ip to allowed_hosts on /etc/nagios/nrpe.cfg
     lineinfile: dest=/etc/nagios/nrpe.cfg regexp='^allowed_hosts.*' line='allowed_hosts=127.0.0.1,{{ ansible_eth1.ipv4.address }},{{ hostvars[groups['monitor-server'][0]]['ansible_eth1']['ipv4']['address'] }}' state=present
     notify: 
