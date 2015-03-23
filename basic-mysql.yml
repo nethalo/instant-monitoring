@@ -1,5 +1,5 @@
 ---
-- hosts: small-nodes
+- hosts: all
   vars:
     mysql_version: 5.5
   sudo: yes
