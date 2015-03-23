@@ -59,7 +59,7 @@
     notify:
     - restart apache
   - name: Install needed packages --> nagios-nrpe-plugin
-    apt: name={{ item }} state=present update_cache=yes cache_valid_time=86400
+    apt: name={{ item }} state=present
     with_items:
       - nagios-nrpe-plugin
   - name: Untar the Nagios Plugins Tarball
