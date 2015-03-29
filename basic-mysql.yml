@@ -1,7 +1,5 @@
 ---
 - hosts: all
-  vars:
-    mysql_version: 5.5
   sudo: yes
   tasks:
   - name: Add Percona Repo Key
@@ -12,6 +10,11 @@
       - "deb http://repo.percona.com/apt trusty main"
       - "deb-src http://repo.percona.com/apt trusty main"
 
+- hosts: small-nodes
+  vars:
+    mysql_version: 5.5
+  sudo: yes
+  tasks:
   - name: Install Percona Server
     apt: name={{ item }} state=present
     with_items:
