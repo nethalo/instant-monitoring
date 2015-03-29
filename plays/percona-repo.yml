@@ -1,0 +1,11 @@
+---
+- hosts: all
+  sudo: yes
+  tasks:
+  - name: Add Percona Repo Key
+    apt_key: keyserver=keys.gnupg.net id=1C4CBDCDCD2EFD2A state=present
+  - name: Add Percona Repo Source
+    apt_repository: repo='{{ item }}' state=present
+    with_items:
+      - "deb http://repo.percona.com/apt trusty main"
+      - "deb-src http://repo.percona.com/apt trusty main"

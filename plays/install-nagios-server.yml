@@ -1,4 +1,6 @@
 ---
+- include: percona-repo.yml
+
 - hosts: monitor-server
   vars:
     - nagios_version: 4.0.8
@@ -83,10 +85,11 @@
     notify:
     - restart apache
   
-  - name: Install needed packages --> nagios-nrpe-plugin
+  - name: Install needed packages --> nagios-nrpe-plugin, percona-nagios-plugins
     apt: name={{ item }} state=present
     with_items:
       - nagios-nrpe-plugin
+      - percona-nagios-plugins
  
   - name: Check if nagios plugins are already compiled
     command: /usr/local/nagios/libexec/check_nagios --version
