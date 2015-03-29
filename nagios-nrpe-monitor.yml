@@ -3,7 +3,9 @@
   vars:
     - nagios_version: 4.0.8
   sudo: yes
+  
   tasks:
+  
   - name: Make sure Nagios3 is not installed
     apt: name={{ item }} state=absent purge=yes
     with_items:
@@ -16,6 +18,7 @@
       - nagios-plugins-basic
       - nagios-plugins-common
       - nagios-plugins-standard
+  
   - name: Install prerequisites packages for Nagios
     apt: name={{ item }} state=present update_cache=yes cache_valid_time=86400
     with_items:
@@ -26,20 +29,33 @@
       - libgd2-xpm-dev
       - libapache2-mod-php5
       - python-passlib
+  
   - name: Create nagioscmd group
     group: name=nagioscmd state=present
+  
   - name: Add Nagios user and add it to nagioscmd group
     user: name=nagios groups=nagioscmd,www-data createhome=no append=yes
+  
   - name: Download nagios core
     get_url: url=http://prdownloads.sourceforge.net/sourceforge/nagios/nagios-{{ nagios_version }}.tar.gz dest=/tmp/nagios-{{ nagios_version }}.tar.gz
     sudo: no
+  
   - name: Download nagios plugins
     get_url: url=http://nagios-plugins.org/download/nagios-plugins-2.0.3.tar.gz dest=/tmp/nagios-plugins-2.0.3.tar.gz
     sudo: no
+  
   - name: Untar the Nagios Core tarball
     unarchive: src=/tmp/nagios-{{ nagios_version }}.tar.gz dest=/tmp copy=no
+
+  - name: Check if nagios core is already compiled
+    command: /usr/local/nagios/bin/nagios --version | grep -m1 Core
+    register: nagios_exists
+    ignore_errors: True
+  
   - name: Compile Nagios core (Configure script)
     command: "./configure --with-nagios-group=nagios --with-command-group=nagioscmd chdir=/tmp/nagios-{{ nagios_version }}"
+    when: nagios_exists|failed
+  
   - name: Compile Nagios core (Make)
     command: "{{ item }} chdir=/tmp/nagios-{{ nagios_version }}"
     with_items:
@@ -48,29 +64,50 @@
       - make install-init
       - make install-config
       - make install-commandmode
+    when: nagios_exists|failed
+  
   - name: Install Nagios Webconf
     command: "/usr/bin/install -c -m 644 sample-config/httpd.conf /etc/apache2/sites-enabled/nagios.conf chdir=/tmp/nagios-{{ nagios_version }}"
+    when: nagios_exists|failed
+  
   - name: Copy eventhandlers directory
     command: "cp -R contrib/eventhandlers/ /usr/local/nagios/libexec/ chdir=/tmp/nagios-{{ nagios_version }}"
+    when: nagios_exists|failed
+  
   - name: Set owner to nagios:nagioscmd
     file: path=/usr/local/nagios/libexec/ owner=nagios group=nagios recurse=yes
+    when: nagios_exists|failed
+  
   - name: Set password for nagiosadmin user
     htpasswd: path=/usr/local/nagios/etc/htpasswd.users name=nagiosadmin password=nagiosadmin owner=root group=www-data mode=0640
     notify:
     - restart apache
+  
   - name: Install needed packages --> nagios-nrpe-plugin
     apt: name={{ item }} state=present
     with_items:
       - nagios-nrpe-plugin
+ 
+  - name: Check if nagios plugins are already compiled
+    command: /usr/local/nagios/libexec/check_nagios --version
+    register: nagios_plugins_exists
+    ignore_errors: True
+ 
   - name: Untar the Nagios Plugins Tarball
     unarchive: src=/tmp/nagios-plugins-2.0.3.tar.gz dest=/tmp copy=no
+    when: nagios_plugins_exists|failed
+  
   - name: Compile Nagios Plugins (Configure script)
     command: "./configure --with-nagios-group=nagios --with-command-group=nagioscmd chdir=/tmp/nagios-plugins-2.0.3"
+    when: nagios_plugins_exists|failed
+  
   - name: Compile Nagios plugins (Make)
     command: "{{ item }} chdir=/tmp/nagios-plugins-2.0.3"
     with_items:
       - make
       - make install
+    when: nagios_plugins_exists|failed
+  
   - name: Enable rewrite Apache module
     apache2_module: state=present name={{ item }}
     with_items:
@@ -78,6 +115,7 @@
       - cgi
     notify:
       - restart apache
+  
   - name: Start nagios service
     service: name=nagios state=started
 
