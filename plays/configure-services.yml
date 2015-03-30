@@ -1,0 +1,29 @@
+---
+- hosts: all
+  sudo: yes
+  tasks:
+  - name: Create Percona Directory (Server)
+    file: path=/usr/local/nagios/etc/percona state=directory owner=nagios group=nagios recurse=yes
+  - name: Set hosts file
+    template: src=../templates/nagios-hosts.j2 dest=/usr/local/nagios/etc/percona/hosts.cfg owner=nagios group=nagios
+    notify: restart nagios server
+  - name: Set services file
+    template: src=../templates/pmp-services.j2 dest=/usr/local/nagios/etc/percona/services.cfg owner=nagios group=nagios
+  - name: Set commands file
+    template: src=../templates/pmp-commands-server.j2 dest=/usr/local/nagios/etc/percona/commands.cfg owner=nagios group=nagios
+
+  handlers:
+  - name: restart nagios server
+    service: name=nagios state=restarted
+    ignore_errors: yes
+
+- hosts: small-nodes
+  sudo: yes
+  tasks:
+  - name: Create Percona directory
+    template: src=../templates/pmp-commands-nodes.j2 dest=/etc/nagios/nrpe.d/percona.cfg
+    notify: restart nagios nrpe
+
+  handlers:
+  - name: restart nagios nrpe
+    service: name=nagios-nrpe-server state=restarted

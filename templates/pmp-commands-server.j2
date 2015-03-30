@@ -1,0 +1,55 @@
+define command{
+        command_name    check_nrpe_service
+        command_line    /usr/lib/nagios/plugins/check_nrpe -H $HOSTADDRESS$
+        }
+
+define command{
+        command_name    check_mysql_service
+        command_line    $USER1$/check_mysql -H $HOSTADDRESS$ --extra-opts=client@/etc/nagios/mysql.cnf
+        }
+
+define command{
+        command_name    check_nrpe
+        command_line    /usr/lib/nagios/plugins/check_nrpe -H $HOSTADDRESS$ -c $ARG1$
+        }
+
+define command{
+        command_name    check_mysql_connections
+        command_line    /usr/lib64/nagios/plugins/pmp-check-mysql-status -H $HOSTADDRESS$ -x Threads_connected -o / -y max_connections -T pct -w 80 -c 95
+        }
+
+define command{
+        command_name    check_mysql_active_threads
+        command_line    /usr/lib64/nagios/plugins/pmp-check-mysql-status -H $HOSTADDRESS$ -x Threads_running -w $ARG1$ -c $ARG2$
+        }
+
+define command{
+        command_name    check_mysql_processlist
+        command_line    /usr/lib64/nagios/plugins/pmp-check-mysql-processlist -H $HOSTADDRESS$ -C $ARG1$ -w $ARG2$ -c $ARG3$
+        }
+
+define command {
+        command_name    check_mysql_innodb
+        command_line    /usr/lib64/nagios/plugins/pmp-check-mysql-innodb -H $HOSTADDRESS$ -C $ARG1$ -w $ARG2$ -c $ARG3$
+        }
+
+define command{
+        command_name    check_mysql_replication_delay
+        command_line    /usr/lib64/nagios/plugins/pmp-check-mysql-replication-delay -H $HOSTADDRESS$ -w $ARG1$ -c $ARG2$
+        }
+
+define command{
+        command_name    check_mysql_replication_running
+        command_line    /usr/lib64/nagios/plugins/pmp-check-mysql-replication-running -H $HOSTADDRESS$
+        }
+
+define command{
+        command_name    check_mysql_deadlocks
+        command_line    /usr/lib64/nagios/plugins/pmp-check-mysql-deadlocks -H $HOSTADDRESS$ -i 5 -w 12 -c 60
+        }
+
+define command{
+        command_name    check_mysql_table_checksum
+        command_line    /usr/lib64/nagios/plugins/pmp-check-pt-table-checksum -H $HOSTADDRESS$
+        }
+
