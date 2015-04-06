@@ -9,7 +9,16 @@
   - name: Install Percona Server
     apt: name={{ item }} state=present
     with_items:
-      - percona-server-server-{{ mysql_version }} 
+      - percona-server-server-{{ mysql_version }}
+      - python-mysqldb 
+    notify:
+    - mysql running
+  - name: Set root password
+    mysql_user: host={{ item }} login_user=root login_password='' name=root password=toor
+    with_items:
+      - 'localhost'
+      - '127.0.0.1'
+      - '%'
     notify:
     - mysql running
 

@@ -1,3 +1,12 @@
 command[rdba_unix_memory]=/usr/lib64/nagios/plugins/pmp-check-unix-memory -d -w 96 -c 98
-command[rdba_mysql_pidfile]=/usr/lib64/nagios/plugins/pmp-check-mysql-pidfile
+command[rdba_mysql_pidfile]=/usr/lib64/nagios/plugins/pmp-check-mysql-pidfiles
 command[rdba_mysql_deleted_files]=/usr/lib64/nagios/plugins/pmp-check-mysql-deleted-file
+command[innodb_long_transaction]=/usr/lib64/nagios/plugins/pmp-check-mysql-innodb -C idle_blocker_duration -c 60 -w 600
+command[innodb_max_duration]=/usr/lib64/nagios/plugins/pmp-check-mysql-innodb -C max_duration -c 86400 -w 172800
+command[innodb_waiter_count]=/usr/lib64/nagios/plugins/pmp-check-mysql-innodb -C waiter_count -c 10 -w 25
+command[mysql_active_threads]=/usr/lib64/nagios/plugins/pmp-check-mysql-status -x Threads_running -w 40 -c 400
+command[mysql_connections]=/usr/lib64/nagios/plugins/pmp-check-mysql-status -x Threads_connected -o / -y max_connections -T pct -w 80 -c 95
+command[mysql_user_connections]=/usr/lib64/nagios/plugins/pmp-check-mysql-processlist -C max_user_conn -w 90 -c 95
+command[mysql_processlist]=/usr/lib64/nagios/plugins/pmp-check-mysql-processlist -C states_count -w 16 -c 32
+command[replication_delay]=/usr/lib64/nagios/plugins/pmp-check-mysql-replication-delay -w 300 -c 600
+command[replication_running]=/usr/lib64/nagios/plugins/pmp-check-mysql-replication-running

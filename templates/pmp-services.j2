@@ -29,20 +29,6 @@ define service{
 define service{
         use                             generic-service
         hostgroup_name                  mysql-servers
-        service_description             MySQL Service
-        check_command                   check_mysql_service
-        }
-
-define service{
-        use                             generic-service
-        hostgroup_name                  mysql-servers
-        service_description             Free Memory
-        check_command                   check_nrpe!rdba_unix_memory
-        }
-
-define service{
-        use                             generic-service
-        hostgroup_name                  mysql-servers
         service_description             MySQL PID
         check_command                   check_nrpe!rdba_mysql_pidfile
         }
@@ -51,62 +37,62 @@ define service{
         use                             generic-service
         hostgroup_name                  mysql-servers
         service_description             MySQL Processlist
-        check_command                   check_mysql_processlist!states_count!16!32
+        check_command                   check_nrpe!mysql_processlist
         }
 
 define service{
         use                             generic-service
         hostgroup_name                  mysql-servers
         service_description             MySQL User Connections 
-        check_command                   check_mysql_processlist!max_user_conn!90!95
+        check_command                   check_nrpe!mysql_user_connections
         }
 
 define service{
         use                             generic-service
         hostgroup_name                  mysql-servers
         service_description             MySQL Connections
-        check_command                   check_mysql_connections
+        check_command                   check_nrpe!mysql_connections
         }
 
 define service{
         use                             generic-service
         hostgroup_name                  mysql-servers
         service_description             MySQL Active Threads
-        check_command                   check_mysql_active_threads!40!400
+        check_command                   check_nrpe!mysql_active_threads
         }
 
 define service{
         use                             generic-service
         hostgroup_name                  mysql-servers
         service_description             MySQL InnoDB Idle Blocker
-        check_command                   check_mysql_innodb!idle_blocker_duration!60!600
+	check_command			check_nrpe!innodb_long_transaction
         }
 
 define service{
         use                             generic-service
         hostgroup_name                  mysql-servers
         service_description             MySQL InnoDB Long Transaction 
-        check_command                   check_mysql_innodb!max_duration!86400!172800
+        check_command                   check_nrpe!innodb_max_duration
         }
 
 define service{
         use                             generic-service
         hostgroup_name                  mysql-servers
         service_description             MySQL InnoDB Lock Waits 
-        check_command                   check_mysql_innodb!waiter_count!10!25
+        check_command                   check_nrpe!innodb_waiter_count
         }
 
 define service{
         use                             generic-service
         hostgroup_name                  mysql-servers
         service_description             MySQL Replication Running
-        check_command                   check_mysql_replication_running
+        check_command                   check_nrpe!replication_running
         }
 
 define service{
         use                             generic-service
         hostgroup_name                  mysql-servers
         service_description             MySQL Replication Delay
-        check_command                   check_mysql_replication_delay!300!600
+        check_command                   check_nrpe!replication_delay
         }
 

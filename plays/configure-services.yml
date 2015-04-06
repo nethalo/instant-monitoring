@@ -1,9 +1,18 @@
 ---
 - hosts: all
+  vars:
+  - mysqlpass: toor
   sudo: yes
   tasks:
+  - name: Create cnf file for Nagios with mysql credentials
+    template: src=../templates/mysql-nagios-credentials.j2 dest=/etc/nagios/mysql.cnf owner=root group=nagios mode=0640
+    when: "'small-nodes' in {{ group_names }}"
   - name: Create Percona Directory (Server)
     file: path=/usr/local/nagios/etc/percona state=directory owner=nagios group=nagios recurse=yes
+  - name: Tell nagios that look into /usr/local/nagios/etc/percona
+    lineinfile: dest=/usr/local/nagios/etc/nagios.cfg line='cfg_dir=/usr/local/nagios/etc/percona' state=present
+    notify: restart nagios server
+    when: "'monitor-server' in {{ group_names }}"
   - name: Set hosts file
     template: src=../templates/nagios-hosts.j2 dest=/usr/local/nagios/etc/percona/hosts.cfg owner=nagios group=nagios
     notify: restart nagios server
@@ -11,10 +20,12 @@
     template: src=../templates/pmp-services.j2 dest=/usr/local/nagios/etc/percona/services.cfg owner=nagios group=nagios
   - name: Set commands file
     template: src=../templates/pmp-commands-server.j2 dest=/usr/local/nagios/etc/percona/commands.cfg owner=nagios group=nagios
+    notify: restart nagios server
 
   handlers:
   - name: restart nagios server
     service: name=nagios state=restarted
+    when: "'monitor-server' in {{ group_names }}"
     ignore_errors: yes
 
 - hosts: small-nodes
@@ -27,3 +38,4 @@
   handlers:
   - name: restart nagios nrpe
     service: name=nagios-nrpe-server state=restarted
+    when: "'small-nodes' in {{ group_names }}"
