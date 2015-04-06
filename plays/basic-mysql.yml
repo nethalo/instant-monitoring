@@ -14,7 +14,7 @@
     notify:
     - mysql running
   - name: Set root password
-    mysql_user: host={{ item }} login_user=root login_password='' name=root password=toor
+    mysql_user: host={{ item }} login_user=root login_password='' name=nagios password=toor
     with_items:
       - 'localhost'
       - '127.0.0.1'

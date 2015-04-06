@@ -7,6 +7,8 @@
     - []
 
 - hosts: small-nodes
+  vars:
+  - username: nagios
   sudo: yes
   tasks:
   - name: Install needed packages --> nagios-plugins, nagios-nrpe-server
@@ -24,6 +26,11 @@
   - name: Comment default hardcoded commands present inside nrpe.cfg
     replace: dest=/etc/nagios/nrpe.cfg regexp='^command\[' replace='# \g<0>'
 
+  - name: Give sudo passwordless to nagios
+    template: src=~/instant/templates/sudoers.j2 dest=/etc/sudoers.d/{{ username }} owner=root
+      group=root mode=0440 validate='visudo -cf %s'
+
   handlers:
   - name: restart nagios nrpe
     service: name=nagios-nrpe-server state=restarted
+    when: "'small-nodes' in {{ group_names }}"
