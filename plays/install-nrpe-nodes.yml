@@ -27,7 +27,7 @@
     replace: dest=/etc/nagios/nrpe.cfg regexp='^command\[' replace='# \g<0>'
 
   - name: Give sudo passwordless to nagios
-    template: src=~/instant/templates/sudoers.j2 dest=/etc/sudoers.d/{{ username }} owner=root
+    template: src=../templates/sudoers.j2 dest=/etc/sudoers.d/{{ username }} owner=root
       group=root mode=0440 validate='visudo -cf %s'
 
   handlers:
