@@ -18,7 +18,13 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "dos" do |dos|
     dos.vm.hostname = "nodo-dos"
-    dos.vm.network "private_network", ip: "172.28.128.4", name: "vboxnet3", adapter: 2
+    dos.vm.network "private_network", ip: "172.28.128.4"
+  end
+
+  config.vm.define "nagioscentral" do |nagioscentral|
+     nagioscentral.vm.hostname = "nagios-central"
+     nagioscentral.vm.network "forwarded_port", guest: 80, host: 1234
+     nagioscentral.vm.network "private_network", ip: "172.28.128.7"
   end
 
   config.vm.provider "virtualbox" do |vb|
