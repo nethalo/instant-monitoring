@@ -12,13 +12,13 @@ Vagrant.configure(2) do |config|
   config.hostmanager.ignore_private_ip = false
 
   config.vm.define "uno" do |uno|
-    config.vm.hostname = "nodo-uno"
-    config.vm.network "private_network", ip: "172.28.128.3"
+    uno.vm.hostname = "nodo-uno"
+    uno.vm.network "private_network", ip: "172.28.128.3"
   end
 
   config.vm.define "dos" do |dos|
-    config.vm.hostname = "nodo-dos"
-    config.vm.network "private_network", ip: "172.28.128.4", name: "vboxnet3", adapter: 2
+    dos.vm.hostname = "nodo-dos"
+    dos.vm.network "private_network", ip: "172.28.128.4", name: "vboxnet3", adapter: 2
   end
 
   config.vm.provider "virtualbox" do |vb|
