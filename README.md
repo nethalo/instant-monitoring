@@ -11,7 +11,9 @@ Ansible in a nutshell
 	* python-simplejson (if using python 2.4)
 	* python-mysqldb (For MySQL specific tasks)
 * OpenSSH
+
 #### Installing
+
 ##### Mac OS X
 The most easy way is using [Homebrew] (http://brew.sh/). Install Brew and then:
 ```
