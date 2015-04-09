@@ -3,6 +3,34 @@ Knowing what's going on inside your databases is priceless. And configuring Nagi
 
 Using [Ansible] (http://docs.ansible.com/) playbooks you can easily achieve this. Let's setup Nagios with NRPE monitoring
 
+### Installing Ansible
+Ansible in a nutshell
+#### Requirements
+* Python (2.4 or greater)
+* Python modules: 
+	* python-simplejson (if using python 2.4)
+	* python-mysqldb (For MySQL specific tasks)
+* OpenSSH
+#### Installing
+##### Mac OS X
+The most easy way is using [Homebrew] (http://brew.sh/). Install Brew and then:
+```
+brew install ansible
+```
+##### Debian and friends
+If you're lucky, you have ansible on apt:
+```
+apt-get install ansible
+```
+However, most likely is that Ansible package have an old version (1.5) so it will be better to install from source
+
+##### Red Hat and friends
+Using yum
+```
+yum install ansible
+```
+##### Installing from source
+Ansible can be installed by cloning the git repo. All the info can be found on the Documentation for [installing from source] (http://docs.ansible.com/intro_installation.html#running-from-source)
 
 ## Steps
 
