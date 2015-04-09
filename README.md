@@ -1,5 +1,8 @@
-# Instant Monitoring (Or how to deploy Nagios without worries)
-Ansible plays to easily setup Nagios NRPE
+# Instant Monitoring (Or how to deploy Nagios without worries). Focused on MySQL
+Knowing what's going on inside your databases is priceless. And configuring Nagios on a automated basis is better.
+
+Using [Ansible] (http://docs.ansible.com/) playbooks you can easily achieve this. Let's setup Nagios with NRPE monitoring
+
 
 ## Steps
 
@@ -10,7 +13,7 @@ vagrant up monitor server and nodes
 Since i don't like to write the user password e-v-e-r-y time a playbook is executed, i just create a user on all the VMs that will use my ssh public key (Actually, it will use any key that resides in the path "~/.ssh/id\_rsa.pub") and i give sudo with no password to that user. Less risky options available but not in this repository :)
 
 ```
-ansible-playbook plays/set-keys.yml --ask-pass
+ansible-playbook -i ansible_hosts plays/set-keys.yml --ask-pass
 ```
 
 ### Install the Nagios server. 
@@ -24,14 +27,14 @@ Things installed:
 Also, it sets the user and password required to open the Dashboard url. In this case, user/password are: nagiosadmin/nagiosadmin
 
 ```
-ansible-playbook plays/install-nagios-server.yml
+ansible-playbook -i ansible_hosts plays/install-nagios-server.yml
 ```
 
 ### Set the Percona repository on the nodes (And install MySQL)
 We need something to be subject of monitoring! In this step, the Percona repository is installed and also the Percona Server will be set up
 
 ```
-ansible-playbook plays/basic-mysql.yml
+ansible-playbook -i ansible_hosts plays/basic-mysql.yml
 ```
 
 ### Install Nagios NRPE on the nodes.
@@ -39,12 +42,12 @@ All the monitored nodes needs to run the NRPE server and the Nagios plugins. It'
 Additionaly, the Percona Nagios Plugins are installed. This guys will perform the MySQL monitoring magic
 
 ```
-ansible-playbook plays/install-nrpe-nodes.yml
+ansible-playbook -i ansible_hosts plays/install-nrpe-nodes.yml
 ```
 
 ### Configure Nagios to check services on the nodes
 This step is the reason for all this trouble. This playbook tells the Nagios server the hosts that needs to check and the services on thoses hosts to monitor.
 
 ```
-ansible-playbook plays/configure-services.yml
+ansible-playbook -i ansible_hosts plays/configure-services.yml
 ```
