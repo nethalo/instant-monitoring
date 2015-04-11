@@ -83,7 +83,7 @@
     notify:
     - restart apache
   
-  - name: Install needed packages --> nagios-nrpe-plugin, percona-nagios-plugins
+  - name: Install needed packages --> nagios-nrpe-plugin
     apt: name={{ item }} state=present
     with_items:
       - nagios-nrpe-plugin
