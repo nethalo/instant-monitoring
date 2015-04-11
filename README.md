@@ -43,10 +43,13 @@ Ansible can be installed by cloning the git repo. All the info can be found on t
 vagrant up monitor server and nodes
 
 ### Create a user with sudo grants on the VMs and set the public key (this is just for easy play)
-Since i don't like to write the user password e-v-e-r-y time a playbook is executed, i just create a user on all the VMs that will use my ssh public key (Actually, it will use any key that resides in the path "~/.ssh/id\_rsa.pub") and i give sudo with no password to that user. Less risky options available but not in this repository :)
+Since i don't like to write the user password e-v-e-r-y time a playbook is executed, i just create a user on all the VMs that will use:
+* My ssh public key (Actually, it will use any key that resides in the path "~/.ssh/id\_rsa.pub") 
+* My username, which is "daniel"
+* And i give sudo with no password to that user. Less risky options available but not in this repository :)
 
 ```
-ansible-playbook plays/set-keys.yml --ask-pass
+ansible-playbook plays/set-keys.yml --ask-pass -e "username=daniel"
 ```
 
 ### Install the Nagios server. 
