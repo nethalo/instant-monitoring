@@ -40,7 +40,10 @@ Ansible can be installed by cloning the git repo. All the info can be found on t
 ## Steps
 
 ### Launch the VMs
-vagrant up monitor server and nodes
+Since we're using Vagrant, fire up the VMs is as easy as run:
+```
+vagrant up
+```
 
 ### Create a user with sudo grants on the VMs and set the public key (this is just for easy play)
 Since i don't like to write the user password e-v-e-r-y time a playbook is executed, i just create a user on all the VMs that will use:
@@ -87,3 +90,10 @@ This step is the reason for all this trouble. This playbook tells the Nagios ser
 ```
 ansible-playbook plays/configure-services.yml
 ```
+
+## Simpler Alternative
+We can run all the above steps... or we can have a single YAML file that includes all the steps and just call that one ( + set-keys.yml):
+```
+ansible-playbook plays/set-keys.yml --ask-pass -e "username=daniel"
+ansible-playbook main.yml
+``` 
