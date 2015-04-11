@@ -1,0 +1,4 @@
+- include: plays/install-nagios-server.yml
+- include: plays/basic-mysql.yml
+- include: plays/install-nrpe-nodes.yml
+- include: plays/configure-services.yml
