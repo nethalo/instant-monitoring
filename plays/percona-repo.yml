@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: small-nodes
   sudo: yes
   tasks:
   - name: Add Percona Repo Key
