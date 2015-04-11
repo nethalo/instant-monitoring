@@ -54,6 +54,7 @@ Since i don't like to write the user password e-v-e-r-y time a playbook is execu
 ```
 ansible-playbook plays/set-keys.yml --ask-pass -e "username=daniel"
 ```
+This step will ask for a SSH password. All the Vagrant boxes uses the user vagrant and the password: **vagrant**
 
 ### Install the Nagios server. 
 This machine will be the monitoring box. 
