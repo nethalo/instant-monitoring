@@ -1,7 +1,5 @@
 ---
 - hosts: all
-  vars:
-    username: daniel
   remote_user: vagrant
   sudo: yes
   tasks:
@@ -9,8 +7,11 @@
     apt: name=adduser state=present
   - name: Add new user
     user: name={{ username }} createhome=yes shell=/bin/bash state=present
+    when: username is defined
   - name: Add new user public key to authorized_key
     authorized_key: user={{ username }} key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    when: username is defined
   - name: Give sudo passwordless to new user
     template: src=../templates/sudoers.j2 dest=/etc/sudoers.d/{{ username }} owner=root
       group=root mode=0440 validate='visudo -cf %s'
+    when: username is defined
