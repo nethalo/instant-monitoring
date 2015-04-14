@@ -3,7 +3,7 @@ Knowing what's going on inside your databases is priceless. And configuring Nagi
 
 Using [Ansible] (http://docs.ansible.com/) playbooks you can easily achieve this. Let's setup Nagios with NRPE monitoring
 
-The **ultimate goal** is to install and configure the [PERCONA monitoring plugins for Nagios] (http://www.percona.com/doc/percona-monitoring-plugins/1.1/nagios/index). The Percona monitoring plugins (or PMP) is a group of scripts created by MySQL experts, with good documentation, support for the newest versions of MySQL and InnoDB, great integration with other Percona software, such as Percona Server and Percona Toolkit. And the best: Easy to install and configure!
+The **ultimate goal** is to install and configure the [PERCONA monitoring plugins for Nagios] (http://www.percona.com/doc/percona-monitoring-plugins/1.1/nagios). The Percona monitoring plugins (or PMP) is a group of scripts created by MySQL experts, with good documentation, support for the newest versions of MySQL and InnoDB, great integration with other Percona software, such as Percona Server and Percona Toolkit. And the best: Easy to install and configure!
 
 
 ### Installing Ansible
