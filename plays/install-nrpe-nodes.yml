@@ -11,7 +11,7 @@
   - username: nagios
   sudo: yes
   tasks:
-  - name: Install needed packages --> nagios-plugins, nagios-nrpe-server
+  - name: Install needed packages --> nagios-plugins, nagios-nrpe-server, percona nagios plugins
     apt: name={{ item }} state=present update_cache=yes cache_valid_time=86400
     with_items:
       - nagios-plugins
