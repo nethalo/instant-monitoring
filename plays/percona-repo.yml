@@ -4,8 +4,13 @@
   tasks:
   - name: Add Percona Repo Key
     apt_key: keyserver=keys.gnupg.net id=1C4CBDCDCD2EFD2A state=present
+  - name: Make sure lsb-release package is installed
+    apt: name=lsb-release state=present
+  - name: Get release codename
+    shell: lsb_release -c | grep Codename | awk '{print $2}'
+    register: linux_codename
   - name: Add Percona Repo Source
     apt_repository: repo='{{ item }}' state=present
     with_items:
-      - "deb http://repo.percona.com/apt trusty main"
-      - "deb-src http://repo.percona.com/apt trusty main"
+      - "deb http://repo.percona.com/apt {{ linux_codename.stdout }} main"
+      - "deb-src http://repo.percona.com/apt {{ linux_codename.stdout }} main"
